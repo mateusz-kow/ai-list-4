@@ -1,7 +1,7 @@
 [project]
 name = "list-4"
 version = "0.1.0"
-description = "Add your description here"
+description = "Projekt AI - Klasyfikacja przeżywalności (Cirrhosis)"
 readme = "README.md"
 requires-python = ">=3.14.3"
 dependencies = [
@@ -11,3 +11,21 @@ dependencies = [
     "scikit-learn>=1.9.0",
     "seaborn>=0.13.2",
 ]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.15.0",
+    "prek>=0.4.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "NPY", "PD"]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
