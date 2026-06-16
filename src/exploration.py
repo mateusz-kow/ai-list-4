@@ -43,7 +43,10 @@ class DataExplorer:
 
     def _plot_missing_values(self) -> None:
         plt.figure(figsize=(10, 6))
-        sns.heatmap(self.df.isna(), yticklabels=False, cbar=False, cmap="viridis")
+        sns.heatmap(self.df.isna(), yticklabels=100, cbar=True, cmap="viridis")
         plt.title("Missing values map")
+        plt.xlabel("Features")
+        plt.ylabel("Row Index")
+        plt.tight_layout()
         plt.savefig(self.output_dir / "missing_values_map.png")
         plt.close()

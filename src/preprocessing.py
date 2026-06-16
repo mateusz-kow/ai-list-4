@@ -15,15 +15,21 @@ class DataPreprocessor:
         self.df = df.copy()
         self.target_col = target_col
         self.label_encoders = {}
-
-        self.df = self.df.drop(columns=["ID"])
+        self.target_names = []
 
     def prepare_data(self):
+        self.df = self.df.drop(columns=["ID"])
+        initial_count = len(self.df)
+        self.df = self.df.dropna(subset=[self.target_col])
+        if len(self.df) < initial_count:
+            logger.info(f"Dropped {initial_count - len(self.df)} rows with missing target labels.")
+
         X = self.df.drop(columns=[self.target_col])
         y = self.df[self.target_col]
 
         target_le = LabelEncoder()
         y = target_le.fit_transform(y)
+        self.target_names = target_le.classes_
 
         X_train, X_val, y_train, y_val = train_test_split(
             X, y, test_size=0.3, random_state=42, stratify=y
@@ -40,7 +46,7 @@ class DataPreprocessor:
         X_train_pca, X_val_pca = self._apply_pca(X_train_std, X_val_std)
         data_variants["pca"] = (X_train_pca, X_val_pca, y_train, y_val)
 
-        return data_variants
+        return data_variants, self.target_names
 
     def _handle_missing_values(self, X_train, X_val):
         num_cols = X_train.select_dtypes(include=[np.number]).columns
